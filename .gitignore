@@ -1,0 +1,25 @@
+# Godot 4+ specific ignores
+.godot/
+
+# Archivos binarios generados por Godot
+*.import
+*.tscn.import
+*.scn.import
+*.imported
+*.imported.res
+*.imported.tres
+*.imported.cfg
+*.cfg
+
+# Directorios y archivos generados por Godot
+bin/
+export/
+lib/
+temp/
+
+# Archivos de configuración personal
+#editor_settings-3.tres
+
+# Archivos y directorios generados por sistema operativo y editores
+.DS_Store
+Thumbs.db
