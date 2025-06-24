@@ -1,0 +1,48 @@
+[gd_scene load_steps=7 format=3 uid="uid://vhqx265r4hot"]
+
+[ext_resource type="Script" uid="uid://bnjjt00shrg7r" path="res://PreScenes/Player/player.gd" id="1_kbl57"]
+[ext_resource type="Texture2D" uid="uid://boi71a2h15gw1" path="res://Assets/PlayerAssets/Camuflaje/backpack.PNG" id="1_l7jnv"]
+[ext_resource type="Texture2D" uid="uid://c16qc61mjthec" path="res://Assets/PlayerAssets/Camuflaje/Arms.PNG" id="2_kbl57"]
+[ext_resource type="Texture2D" uid="uid://dsvfx848hgr17" path="res://Assets/PlayerAssets/Camuflaje/Head.PNG" id="3_322wo"]
+[ext_resource type="Texture2D" uid="uid://dycwcrg3adsgq" path="res://Assets/Others/Weapons.png" id="4_7aqry"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_lgoq1"]
+radius = 37.0
+
+[node name="Player" type="CharacterBody2D"]
+motion_mode = 1
+wall_min_slide_angle = 0.00523599
+script = ExtResource("1_kbl57")
+
+[node name="BodyPart" type="Node2D" parent="."]
+position = Vector2(0, 1.78814e-06)
+rotation = -1.5708
+scale = Vector2(0.85, 0.85)
+
+[node name="BackPack" type="Sprite2D" parent="BodyPart"]
+position = Vector2(0, 2)
+scale = Vector2(0.35, 0.35)
+texture = ExtResource("1_l7jnv")
+
+[node name="Arms" type="Sprite2D" parent="BodyPart"]
+position = Vector2(0, 28)
+scale = Vector2(0.31, 0.33)
+texture = ExtResource("2_kbl57")
+
+[node name="Head" type="Sprite2D" parent="BodyPart"]
+scale = Vector2(0.35, 0.35)
+texture = ExtResource("3_322wo")
+
+[node name="WeaponContainer" type="Node2D" parent="BodyPart"]
+scale = Vector2(1, 1)
+
+[node name="Weapon" type="Sprite2D" parent="BodyPart/WeaponContainer"]
+position = Vector2(-4, 76)
+scale = Vector2(0.4, 0.3)
+texture = ExtResource("4_7aqry")
+offset = Vector2(43.845, 0)
+hframes = 5
+frame = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_lgoq1")
