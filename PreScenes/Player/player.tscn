@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://vhqx265r4hot"]
+[gd_scene load_steps=8 format=3 uid="uid://vhqx265r4hot"]
 
 [ext_resource type="Script" uid="uid://bnjjt00shrg7r" path="res://PreScenes/Player/player.gd" id="1_kbl57"]
 [ext_resource type="Texture2D" uid="uid://boi71a2h15gw1" path="res://Assets/PlayerAssets/Camuflaje/backpack.PNG" id="1_l7jnv"]
 [ext_resource type="Texture2D" uid="uid://c16qc61mjthec" path="res://Assets/PlayerAssets/Camuflaje/Arms.PNG" id="2_kbl57"]
 [ext_resource type="Texture2D" uid="uid://dsvfx848hgr17" path="res://Assets/PlayerAssets/Camuflaje/Head.PNG" id="3_322wo"]
 [ext_resource type="Texture2D" uid="uid://dycwcrg3adsgq" path="res://Assets/Others/Weapons.png" id="4_7aqry"]
+[ext_resource type="PackedScene" uid="uid://cfnmvoqs6gq3n" path="res://PreScenes/StateBar/state_bar.tscn" id="6_322wo"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_lgoq1"]
 radius = 37.0
@@ -60,3 +61,33 @@ position = Vector2(130.588, 4.70588)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_lgoq1")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HealthBar" parent="CanvasLayer" instance=ExtResource("6_322wo")]
+offset_left = -628.28
+offset_top = 1.20001
+offset_right = -628.0
+offset_bottom = 1.43994
+EnableIconBar = false
+AllowRegeneration = false
+
+[node name="StaminaBar" parent="CanvasLayer" instance=ExtResource("6_322wo")]
+offset_left = -628.28
+offset_top = 31.2
+offset_right = -628.0
+offset_bottom = 31.4399
+scale = Vector2(0.75, 1)
+ScaleBar = Vector2(0.75, 1)
+BarColor = Color(1, 1, 0, 1)
+EnableIconBar = false
+ShowValues = false
+DamageIndicatorBarColor = Color(1, 0, 0, 1)
+ModeBar = "Mana"
+AllowRegeneration = false
+FillBarWithTime = true
+TimeToFillBar = 3.0
+DelayToFillWithTime = 2.0
+BarColorFullWithTime = Color(1, 1, 0, 1)
+
+[connection signal="EmptyBar" from="CanvasLayer/HealthBar" to="." method="_on_health_bar_empty_bar"]

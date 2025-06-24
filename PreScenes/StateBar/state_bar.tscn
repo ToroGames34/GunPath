@@ -1,0 +1,116 @@
+[gd_scene load_steps=4 format=3 uid="uid://cfnmvoqs6gq3n"]
+
+[ext_resource type="Script" uid="uid://cjc1k5eo8wvfl" path="res://PreScenes/StateBar/state_bar.gd" id="1_fwxw2"]
+[ext_resource type="Texture2D" uid="uid://l3e0jwrkcan5" path="res://Assets/Icons-textures/BlackCircle.png" id="2_ibfww"]
+[ext_resource type="Texture2D" uid="uid://2t0bi0kw84js" path="res://Assets/Icons-textures/3.png" id="3_1vtdb"]
+
+[node name="StateBar" type="Control"]
+process_mode = 3
+layout_mode = 3
+anchor_left = 0.334
+anchor_top = 0.935
+anchor_right = 0.683
+anchor_bottom = 0.968
+offset_left = -0.52002
+offset_top = -0.200073
+offset_right = -0.240051
+offset_bottom = 0.039978
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_fwxw2")
+BarColor = Color(1, 0, 0, 1)
+ModeBar = "Health"
+CurrentValue = 25
+DelayToFillWithTime = 0.001
+
+[node name="ColorBgBar" type="ColorRect" parent="."]
+layout_mode = 1
+offset_left = -1.0
+offset_right = 448.0
+offset_bottom = 24.0
+color = Color(0, 0, 0, 1)
+
+[node name="BorderIconBar" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = -29.0
+offset_top = -7.0
+offset_right = 483.0
+offset_bottom = 505.0
+scale = Vector2(0.07, 0.072)
+texture = ExtResource("2_ibfww")
+
+[node name="TexIconBar" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = -29.0
+offset_top = -7.0
+offset_right = 483.0
+offset_bottom = 505.0
+scale = Vector2(0.07, 0.072)
+
+[node name="BarDmgIndicator" type="TextureProgressBar" parent="."]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = 444.0
+offset_bottom = 21.0
+value = 25.0
+nine_patch_stretch = true
+texture_progress = ExtResource("3_1vtdb")
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="."]
+modulate = Color(1, 0, 0, 1)
+layout_mode = 0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = 444.0
+offset_bottom = 21.0
+value = 25.0
+nine_patch_stretch = true
+texture_progress = ExtResource("3_1vtdb")
+
+[node name="LabelValue" type="Label" parent="."]
+layout_mode = 0
+offset_left = 119.0
+offset_right = 217.0
+offset_bottom = 23.0
+text = "25"
+horizontal_alignment = 2
+
+[node name="LabelSeparator" type="Label" parent="."]
+layout_mode = 0
+offset_left = 220.0
+offset_right = 227.0
+offset_bottom = 23.0
+text = "/"
+horizontal_alignment = 1
+
+[node name="LabelMaxVal" type="Label" parent="."]
+layout_mode = 0
+offset_left = 230.0
+offset_right = 258.0
+offset_bottom = 23.0
+text = "100"
+
+[node name="LabelRegenContainer" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 444.0
+offset_bottom = 24.0
+
+[node name="LabelRegenSpeed" type="Label" parent="LabelRegenContainer"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -46.0
+offset_top = -12.0
+offset_bottom = 12.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "+1.0"
+horizontal_alignment = 2
+
+[node name="EffectContainer" type="Node2D" parent="."]
+
+[connection signal="value_changed" from="TextureProgressBar" to="." method="_on_texture_progress_bar_value_changed"]

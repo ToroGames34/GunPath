@@ -1,6 +1,10 @@
 extends CharacterBody2D
 
 
+const HEALTH: int = 100
+const STAMINA: int = 100
+const SPEED: float = 220.0
+
 @onready var bullet = preload("res://PreScenes/Bullet/bullet.tscn")
 
 signal ShootBullets(bullet, pos, rot, dmg)
@@ -8,14 +12,21 @@ signal ShootBullets(bullet, pos, rot, dmg)
 @onready var BodyPart: Node2D = $BodyPart
 @onready var FusilSprite: Sprite2D = $BodyPart/Cont/WeaponContainer/Fusil
 @onready var ShotgunSprite: Sprite2D = $BodyPart/Cont/WeaponContainer/Shotgun
+@onready var HealthBar: Control = $CanvasLayer/HealthBar
+@onready var StaminaBar: Control = $CanvasLayer/StaminaBar
 
 var TimerAttackSpeed: Timer = Timer.new()
+var TimerTakeStamina: Timer = Timer.new()
 var Weapons: Array = ["fusil", "shotgun"]
 var WeaponsUsing: String = ""
 
-var Speed: float = 220.0
-var Health: float = 100.0
+var Speed: float = SPEED
+var RunSpeed: float = 120.0
+var Health: int
+var Stamina: int
 var Acceleration: float = 50.0
+var SecForTakeStamina: int = 1
+var CostStaminaPerSSec: int = 10
 
 var AttackSpeedFusil: float = 0.05
 var AttackSpeedShotGun: float = 0.35
@@ -31,15 +42,19 @@ var DamageGeneral: float
 
 var IsDeath: bool = false
 var IsMoving: bool = false
+var IsRunning: bool = false
+var CanRun: bool = true
 var CanShoot: bool = true
 var CanShootCD: bool = true
 var CanScattering: bool = false
 
 
 func _ready() -> void:
+	HealthBar.SetMaxValue(HEALTH)
 	WeaponsUsing = Weapons[0]
 	SetWeaponAtribute()
 	TimerAttackSpeedSetting()
+	TimerTakeStaminaSetting()
 
 
 func TimerAttackSpeedSetting() -> void:
@@ -48,6 +63,14 @@ func TimerAttackSpeedSetting() -> void:
 	TimerAttackSpeed.autostart = false
 	TimerAttackSpeed.connect("timeout", self._on_TimerAttackSpeed_timeout)
 	add_child(TimerAttackSpeed)
+
+
+func TimerTakeStaminaSetting() -> void:
+	TimerTakeStamina.wait_time = SecForTakeStamina
+	TimerTakeStamina.one_shot = false
+	TimerTakeStamina.autostart = false
+	TimerTakeStamina.connect("timeout", self._on_TimerTakeStamina_timeout)
+	add_child(TimerTakeStamina)
 
 
 func SetWeaponAtribute():
@@ -71,6 +94,9 @@ func _process(delta: float) -> void:
 		AimWeapons()
 		ChangeWeapon()
 		ShootWeapons()
+	
+	if Input.is_action_just_pressed("p") and OS.is_debug_build():
+		IsDeath = false
 
 
 func AimWeapons() -> void:
@@ -89,9 +115,31 @@ func MoveSystem(Delta) -> void:
 	Dir.x = Input.get_axis("a", "d")
 	
 	CheckIsMoving(Dir)
+	RunningSystem()
+	CheckStaminaPerSecond()
+	
+	if IsRunning:
+		Speed = RunSpeed + SPEED
+	else:
+		Speed = SPEED
 	
 	Dir = Dir.normalized()
 	velocity = velocity.lerp(Dir * Speed, Acceleration * Delta)
+
+
+func RunningSystem() -> void:
+	if CanRun:
+		if IsMoving:
+			if Input.is_action_just_pressed("shift"):
+				IsRunning = true
+				TakeStaminaForRunning(CostStaminaPerSSec)
+				TimerTakeStamina.start()
+			elif Input.is_action_just_released("shift"):
+				IsRunning = false
+				TimerTakeStamina.stop()
+		else:
+			IsRunning = false
+			TimerTakeStamina.stop()
 
 
 func CheckIsMoving(val: Vector2) -> void:
@@ -166,3 +214,30 @@ func BulletInts() -> void:
 
 func _on_TimerAttackSpeed_timeout() -> void:
 	CanShootCD = true
+
+
+func TakeDamage(val: int) -> void:
+	HealthBar.SetDecreaseValue(val)
+	#AnimHurt()
+
+
+func TakeStaminaForRunning(val: int) -> void:
+	StaminaBar.SetDecreaseValueFillWithTime(val)
+
+
+func _on_TimerTakeStamina_timeout() -> void:
+	if IsRunning:
+		TakeStaminaForRunning(CostStaminaPerSSec)
+
+
+func CheckStaminaPerSecond() -> void:
+	if StaminaBar.GetValue() > 0:
+		CanRun = true
+	elif StaminaBar.GetValue() <= 0:
+		CanRun = false
+		IsRunning = false
+		TimerTakeStamina.stop()
+
+
+func _on_health_bar_empty_bar() -> void:
+	IsDeath = true
