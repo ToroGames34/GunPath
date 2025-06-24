@@ -38,13 +38,25 @@ texture = ExtResource("3_322wo")
 
 [node name="WeaponContainer" type="Node2D" parent="BodyPart/Cont"]
 
-[node name="Weapon" type="Sprite2D" parent="BodyPart/Cont/WeaponContainer"]
+[node name="Fusil" type="Sprite2D" parent="BodyPart/Cont/WeaponContainer"]
 position = Vector2(-4, 76)
 scale = Vector2(0.4, 0.3)
 texture = ExtResource("4_7aqry")
 offset = Vector2(43.845, 0)
 hframes = 5
 frame = 3
+
+[node name="Shotgun" type="Sprite2D" parent="BodyPart/Cont/WeaponContainer"]
+visible = false
+position = Vector2(-4, 76)
+scale = Vector2(0.4, 0.3)
+texture = ExtResource("4_7aqry")
+offset = Vector2(19.11, 0)
+hframes = 5
+frame = 4
+
+[node name="Marker2D" type="Marker2D" parent="BodyPart"]
+position = Vector2(130.588, 4.70588)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_lgoq1")

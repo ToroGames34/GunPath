@@ -1,7 +1,15 @@
-[gd_scene load_steps=2 format=3 uid="uid://dm8re2foi4y4c"]
+[gd_scene load_steps=3 format=3 uid="uid://dm8re2foi4y4c"]
 
 [ext_resource type="PackedScene" uid="uid://vhqx265r4hot" path="res://PreScenes/Player/player.tscn" id="1_0vqom"]
+[ext_resource type="Script" uid="uid://b07kk7pw17gw6" path="res://PreScenes/Worlds/World1/world.gd" id="1_e5t0p"]
 
 [node name="World1" type="Node2D"]
+script = ExtResource("1_e5t0p")
 
-[node name="Player" parent="." instance=ExtResource("1_0vqom")]
+[node name="PlayerContainer" type="Node2D" parent="."]
+
+[node name="Player" parent="PlayerContainer" instance=ExtResource("1_0vqom")]
+
+[node name="BulletContainer" type="Node2D" parent="."]
+
+[connection signal="ShootBullets" from="PlayerContainer/Player" to="." method="_on_player_shoot_bullets"]
