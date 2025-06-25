@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://vhqx265r4hot"]
+[gd_scene load_steps=9 format=3 uid="uid://vhqx265r4hot"]
 
 [ext_resource type="Script" uid="uid://bnjjt00shrg7r" path="res://PreScenes/Player/player.gd" id="1_kbl57"]
 [ext_resource type="Texture2D" uid="uid://boi71a2h15gw1" path="res://Assets/PlayerAssets/Camuflaje/backpack.PNG" id="1_l7jnv"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://dsvfx848hgr17" path="res://Assets/PlayerAssets/Camuflaje/Head.PNG" id="3_322wo"]
 [ext_resource type="Texture2D" uid="uid://dycwcrg3adsgq" path="res://Assets/Others/Weapons.png" id="4_7aqry"]
 [ext_resource type="PackedScene" uid="uid://cfnmvoqs6gq3n" path="res://PreScenes/StateBar/state_bar.tscn" id="6_322wo"]
+[ext_resource type="FontFile" uid="uid://drj86rhgs8l4t" path="res://Assets/Fonts/Kurland.ttf" id="7_7aqry"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_lgoq1"]
 radius = 37.0
@@ -21,7 +22,6 @@ scale = Vector2(0.85, 0.85)
 
 [node name="Cont" type="Node2D" parent="BodyPart"]
 rotation = -1.5708
-scale = Vector2(1, 1)
 
 [node name="BackPack" type="Sprite2D" parent="BodyPart/Cont"]
 position = Vector2(0, 2)
@@ -89,5 +89,105 @@ FillBarWithTime = true
 TimeToFillBar = 3.0
 DelayToFillWithTime = 2.0
 BarColorFullWithTime = Color(1, 1, 0, 1)
+
+[node name="AmmoControl" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 1673.0
+offset_top = 1030.0
+offset_right = 1920.0
+offset_bottom = 1080.0
+
+[node name="Weapon" type="Control" parent="CanvasLayer/AmmoControl"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -20.0
+offset_right = 40.0
+offset_bottom = 20.0
+grow_vertical = 2
+
+[node name="Fusil" type="Sprite2D" parent="CanvasLayer/AmmoControl/Weapon"]
+rotation = -1.5708
+scale = Vector2(0.4, 0.3)
+texture = ExtResource("4_7aqry")
+offset = Vector2(43.845, 0)
+hframes = 5
+frame = 3
+
+[node name="Shotgun" type="Sprite2D" parent="CanvasLayer/AmmoControl/Weapon"]
+visible = false
+rotation = -1.5708
+scale = Vector2(0.4, 0.3)
+texture = ExtResource("4_7aqry")
+offset = Vector2(19.11, 0)
+hframes = 5
+frame = 4
+
+[node name="AmmoCont" type="Control" parent="CanvasLayer/AmmoControl"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -67.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LabelSupplier" type="Label" parent="CanvasLayer/AmmoControl/AmmoCont"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -106.5
+offset_top = -26.5
+offset_right = 10.5
+offset_bottom = 26.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("7_7aqry")
+theme_override_font_sizes/font_size = 50
+text = "3"
+horizontal_alignment = 2
+autowrap_mode = 2
+
+[node name="LabelSeparator" type="Label" parent="CanvasLayer/AmmoControl/AmmoCont"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 17.0
+offset_top = -26.5
+offset_right = 57.0
+offset_bottom = 26.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("7_7aqry")
+theme_override_font_sizes/font_size = 50
+text = "/"
+
+[node name="LabelBullets" type="Label" parent="CanvasLayer/AmmoControl/AmmoCont"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 40.5
+offset_top = -26.5
+offset_right = 122.5
+offset_bottom = 26.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("7_7aqry")
+theme_override_font_sizes/font_size = 50
+text = "30"
+autowrap_mode = 2
 
 [connection signal="EmptyBar" from="CanvasLayer/HealthBar" to="." method="_on_health_bar_empty_bar"]
