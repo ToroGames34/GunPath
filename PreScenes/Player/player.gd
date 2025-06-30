@@ -69,15 +69,28 @@ var ShotgunAmmo: Dictionary[String, int] = {
 	"Bullets": 2
 }
 
+var SuplierFusil: Array = []
+var SuplierShotgun: Array = []
+
 
 func _ready() -> void:
 	HealthBar.SetMaxValue(HEALTH)
 	WeaponsUsing = Weapons[0]
 	SetWeaponAtribute()
 	ShowAmmoWeapons()
+	SetSuplierWeapons()
 	TimerAttackSpeedSetting()
 	TimerTakeStaminaSetting()
 	TimerReloadWeaponSetting()
+
+
+func SetSuplierWeapons() -> void:
+	#Reload FusilSuplier
+	for i in range(FusilAmmo.MaxSupplier):
+		SuplierFusil.append(FusilAmmo.MaxBullets)
+	#Reload ShotgunSuplier
+	for i in range(ShotgunAmmo.MaxSupplier):
+		SuplierShotgun.append(ShotgunAmmo.MaxBullets)
 
 
 func TimerAttackSpeedSetting() -> void:
@@ -298,10 +311,10 @@ func ShowAmmoWeapons() -> void:
 	AmmoControl.get_node("AmmoCont").modulate = Color(1, 1 ,1)
 	match WeaponsUsing:
 		"fusil":
-			AmmoControl.get_node("AmmoCont").get_node("LabelSupplier").text = str(FusilAmmo.Supplier)
+			AmmoControl.get_node("AmmoCont").get_node("LabelSupplier").text = str(SuplierFusil.size())
 			AmmoControl.get_node("AmmoCont").get_node("LabelBullets").text = str(FusilAmmo.Bullets)
 			
-			if FusilAmmo.Supplier <= 0:
+			if SuplierFusil.size() <= 0:
 				AmmoControl.get_node("AmmoCont").get_node("LabelSupplier").modulate = Color(1, 0 ,0)
 			else:
 				AmmoControl.get_node("AmmoCont").get_node("LabelSupplier").modulate = Color(1, 1 ,1)
@@ -311,14 +324,14 @@ func ShowAmmoWeapons() -> void:
 			else:
 				AmmoControl.get_node("AmmoCont").get_node("LabelBullets").modulate = Color(1, 1 ,1)
 			
-			if FusilAmmo.Bullets <= 0 and FusilAmmo.Supplier <= 0:
+			if FusilAmmo.Bullets <= 0 and SuplierFusil.size() <= 0:
 				AmmoControl.get_node("AmmoCont").modulate = Color(1, 0 ,0)
 			
 		"shotgun":
-			AmmoControl.get_node("AmmoCont").get_node("LabelSupplier").text = str(ShotgunAmmo.Supplier)
+			AmmoControl.get_node("AmmoCont").get_node("LabelSupplier").text = str(SuplierShotgun.size())
 			AmmoControl.get_node("AmmoCont").get_node("LabelBullets").text = str(ShotgunAmmo.Bullets)
 			
-			if ShotgunAmmo.Supplier <= 0:
+			if SuplierShotgun.size() <= 0:
 				AmmoControl.get_node("AmmoCont").get_node("LabelSupplier").modulate = Color(1, 0 ,0)
 			else:
 				AmmoControl.get_node("AmmoCont").get_node("LabelSupplier").modulate = Color(1, 1 ,1)
@@ -328,7 +341,7 @@ func ShowAmmoWeapons() -> void:
 			else:
 				AmmoControl.get_node("AmmoCont").get_node("LabelBullets").modulate = Color(1, 1 ,1)
 			
-			if ShotgunAmmo.Bullets <= 0 and ShotgunAmmo.Supplier <= 0:
+			if ShotgunAmmo.Bullets <= 0 and SuplierShotgun.size() <= 0:
 				AmmoControl.get_node("AmmoCont").modulate = Color(1, 0 ,0)
 
 
@@ -355,10 +368,9 @@ func AddSupplier(dic: Dictionary, amount: int) -> void:
 		dic.Supplier = dic.MaxSupplier
 
 
-func ReloadWeapon(dic: Dictionary) -> void:
-	if dic.Supplier > 0:
-		dic.Supplier -= 1
-		dic.Bullets = dic.MaxBullets
+func AddSupplier2(dic: Dictionary, supplier: Array, amount: int) -> void:
+	for i in range(amount):
+		supplier.append(dic.MaxBullets)
 
 
 func _on_TimerReloadWeapon_timeout() -> void:
@@ -366,8 +378,19 @@ func _on_TimerReloadWeapon_timeout() -> void:
 		FullReload = false
 		match WeaponsUsing:
 			"fusil":
-				ReloadWeapon(FusilAmmo)
+				ReloadWeapon(FusilAmmo, SuplierFusil)
 			"shotgun":
-				ReloadWeapon(ShotgunAmmo)
+				ReloadWeapon(ShotgunAmmo, SuplierShotgun)
 	
 	ShowAmmoWeapons()
+
+
+func ReloadWeapon(dic: Dictionary, supplier: Array) -> void:
+	var BuletsLeft = dic.MaxBullets - dic.Bullets
+	for i in range(BuletsLeft):
+		if !supplier.size() != 0:
+			break
+		supplier[0] -= 1
+		dic.Bullets += 1
+		if supplier[0] <= 0:
+			supplier.remove_at(0)
