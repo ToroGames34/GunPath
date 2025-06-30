@@ -77,7 +77,6 @@ func _ready() -> void:
 	HealthBar.SetMaxValue(HEALTH)
 	WeaponsUsing = Weapons[0]
 	SetWeaponAtribute()
-	ShowAmmoWeapons()
 	SetSuplierWeapons()
 	TimerAttackSpeedSetting()
 	TimerTakeStaminaSetting()
@@ -91,6 +90,8 @@ func SetSuplierWeapons() -> void:
 	#Reload ShotgunSuplier
 	for i in range(ShotgunAmmo.MaxSupplier):
 		SuplierShotgun.append(ShotgunAmmo.MaxBullets)
+	
+	ShowAmmoWeapons()
 
 
 func TimerAttackSpeedSetting() -> void:
@@ -204,7 +205,7 @@ func ChangeWeapon():
 			ShotgunSprite.visible = false
 			AmmoControl.get_node("Weapon").get_node("Fusil").visible = true
 			AmmoControl.get_node("Weapon").get_node("Shotgun").visible = false
-			TimerAttackSpeed.stop()
+			#TimerAttackSpeed.stop()
 			FullReload = false
 			SetWeaponAtribute()
 		elif Input.is_action_just_pressed("2"):
@@ -213,7 +214,7 @@ func ChangeWeapon():
 			ShotgunSprite.visible = true
 			AmmoControl.get_node("Weapon").get_node("Fusil").visible = false
 			AmmoControl.get_node("Weapon").get_node("Shotgun").visible = true
-			TimerAttackSpeed.stop()
+			#TimerAttackSpeed.stop()
 			FullReload = false
 			SetWeaponAtribute()
 	
