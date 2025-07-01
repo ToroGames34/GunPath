@@ -29,9 +29,12 @@ func ImpactF():
 
 
 func _on_body_entered(body):
-	if body.is_in_group("enemy"):
+	if body.is_in_group("player"):
 		ImpactF()
-		body.Hurt(roundi(Damage))
+		body.TakeDamage(roundi(Damage))
+	elif body.is_in_group("enemy"):
+		ImpactF()
+		body.TakeDamage(roundi(Damage))
 	elif body.is_in_group("wall"):
 		ImpactF()
 
