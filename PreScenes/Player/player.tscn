@@ -8,10 +8,11 @@
 [ext_resource type="Texture2D" uid="uid://dn4qp2woakplp" path="res://Assets/PlayerAssets/OtherCamuflaje/Head_PixelCam.png" id="6_d82ql"]
 [ext_resource type="FontFile" uid="uid://drj86rhgs8l4t" path="res://Assets/Fonts/Kurland.ttf" id="7_7aqry"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_lgoq1"]
-radius = 37.0
+[sub_resource type="CircleShape2D" id="CircleShape2D_7aqry"]
+radius = 32.0156
 
 [node name="Player" type="CharacterBody2D" groups=["player"]]
+collision_mask = 7
 motion_mode = 1
 wall_min_slide_angle = 0.00523599
 script = ExtResource("1_kbl57")
@@ -20,27 +21,35 @@ script = ExtResource("1_kbl57")
 position = Vector2(0, 1.78814e-06)
 scale = Vector2(0.85, 0.85)
 
-[node name="Cont" type="Node2D" parent="BodyPart"]
+[node name="ContBody" type="Node2D" parent="BodyPart"]
 rotation = -1.5708
 
-[node name="BackPack2" type="Sprite2D" parent="BodyPart/Cont"]
-position = Vector2(0, 2)
+[node name="ContBodyScale" type="Node2D" parent="BodyPart/ContBody"]
+rotation = 1.5708
+scale = Vector2(0.8, 0.8)
+
+[node name="BackPack2" type="Sprite2D" parent="BodyPart/ContBody/ContBodyScale"]
+position = Vector2(2, -7.23998e-06)
+rotation = -1.5708
 scale = Vector2(0.65, 0.65)
 texture = ExtResource("3_d82ql")
 
-[node name="Arms2" type="Sprite2D" parent="BodyPart/Cont"]
-position = Vector2(0, 28)
+[node name="Arms2" type="Sprite2D" parent="BodyPart/ContBody/ContBodyScale"]
+position = Vector2(28, -0.00010136)
+rotation = -1.5708
 scale = Vector2(0.58, 0.58)
 texture = ExtResource("4_i6aao")
 
-[node name="Head2" type="Sprite2D" parent="BodyPart/Cont"]
-position = Vector2(-0.5, 1)
+[node name="Head2" type="Sprite2D" parent="BodyPart/ContBody/ContBodyScale"]
+position = Vector2(1, 0.499996)
+rotation = -1.5708
 scale = Vector2(0.65, 0.65)
 texture = ExtResource("6_d82ql")
 
-[node name="WeaponContainer" type="Node2D" parent="BodyPart/Cont"]
+[node name="WeaponContainer" type="Node2D" parent="BodyPart/ContBody/ContBodyScale"]
+rotation = -1.5708
 
-[node name="Fusil" type="Sprite2D" parent="BodyPart/Cont/WeaponContainer"]
+[node name="Fusil" type="Sprite2D" parent="BodyPart/ContBody/ContBodyScale/WeaponContainer"]
 position = Vector2(-4, 76)
 scale = Vector2(0.4, 0.3)
 texture = ExtResource("4_7aqry")
@@ -48,7 +57,7 @@ offset = Vector2(43.845, 0)
 hframes = 5
 frame = 3
 
-[node name="Shotgun" type="Sprite2D" parent="BodyPart/Cont/WeaponContainer"]
+[node name="Shotgun" type="Sprite2D" parent="BodyPart/ContBody/ContBodyScale/WeaponContainer"]
 visible = false
 position = Vector2(-4, 76)
 scale = Vector2(0.4, 0.3)
@@ -58,13 +67,21 @@ hframes = 5
 frame = 4
 
 [node name="Marker2D" type="Marker2D" parent="BodyPart"]
-position = Vector2(130.588, 4.70588)
+position = Vector2(108.235, 3.52941)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_lgoq1")
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-29, 0, -30, -10, -26, -21, -15, -24, -7, -24, -6, -30, -2, -32, 5, -33, 13, -33, 19, -31, 44, -14, 52, -12, 81, -6, 81, 12, 47, 19, 39, 21, 33, 22, 19, 33, 5, 33, -4, 26, -22, 23, -29, 14)
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(3, 0)
+shape = SubResource("CircleShape2D_7aqry")
+disabled = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
-enabled = false
+zoom = Vector2(1.2, 1.2)
+position_smoothing_enabled = true
+position_smoothing_speed = 6.5
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

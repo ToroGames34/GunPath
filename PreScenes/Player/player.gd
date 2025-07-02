@@ -10,12 +10,12 @@ const SPEED: float = 220.0
 signal ShootBullets(bullet, pos, rot, dmg)
 
 @onready var BodyPart: Node2D = $BodyPart
-@onready var FusilSprite: Sprite2D = $BodyPart/Cont/WeaponContainer/Fusil
-@onready var ShotgunSprite: Sprite2D = $BodyPart/Cont/WeaponContainer/Shotgun
+@onready var FusilSprite: Sprite2D = $BodyPart/ContBody/ContBodyScale/WeaponContainer/Fusil
+@onready var ShotgunSprite: Sprite2D = $BodyPart/ContBody/ContBodyScale/WeaponContainer/Shotgun
 @onready var HealthBar: Control = $CanvasLayer/HealthBar
 @onready var StaminaBar: Control = $CanvasLayer/StaminaBar
 @onready var AmmoControl: Control = $CanvasLayer/AmmoControl
-
+@onready var CollisionShapeBody: CollisionPolygon2D = $CollisionShape2D
 var TimerAttackSpeed: Timer = Timer.new()
 var TimerTakeStamina: Timer = Timer.new()
 var TimerReloadWeapon: Timer = Timer.new()
@@ -149,6 +149,7 @@ func _process(delta: float) -> void:
 
 func AimWeapons() -> void:
 	BodyPart.look_at(get_global_mouse_position())
+	CollisionShapeBody.look_at(get_global_mouse_position())
 
 
 func _physics_process(delta) -> void:

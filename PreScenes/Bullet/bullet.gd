@@ -14,14 +14,32 @@ func _ready():
 	pass
 
 
+#func _process(delta):
+	#if !Impact:
+		#position += transform.y * Velocity * -1 * delta
+
+
+
 func _process(delta):
-	if !Impact:
-		position += transform.y * Velocity * -1 * delta
+	if Impact:
+		return
+
+	var from = global_position
+	var to = from + transform.y * Velocity * -1 * delta
+
+	var space_state = get_world_2d().direct_space_state
+
+	var params := PhysicsRayQueryParameters2D.create(from, to)
+	params.exclude = [self]
+
+	var hit = space_state.intersect_ray(params)
+
+	global_position = hit.position if hit else to
 
 
 func ImpactF():
 	Impact = true
-	Anim.scale = Vector2(1.3, 1.3)
+	Anim.scale = Vector2(0.85, 0.85)
 	Anim.play("impact")
 	@warning_ignore("incompatible_ternary")
 	#AudioHit.play() if GlobalV.CanPlaySounds else ""
