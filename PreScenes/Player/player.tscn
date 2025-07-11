@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://vhqx265r4hot"]
+[gd_scene load_steps=10 format=3 uid="uid://vhqx265r4hot"]
 
 [ext_resource type="Script" uid="uid://bnjjt00shrg7r" path="res://PreScenes/Player/player.gd" id="1_kbl57"]
 [ext_resource type="Texture2D" uid="uid://s6ndt4e7k3xu" path="res://Assets/PlayerAssets/OtherCamuflaje/Back_PixelCam.png" id="3_d82ql"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://cfnmvoqs6gq3n" path="res://PreScenes/StateBar/state_bar.tscn" id="6_322wo"]
 [ext_resource type="Texture2D" uid="uid://dn4qp2woakplp" path="res://Assets/PlayerAssets/OtherCamuflaje/Head_PixelCam.png" id="6_d82ql"]
 [ext_resource type="FontFile" uid="uid://drj86rhgs8l4t" path="res://Assets/Fonts/Kurland.ttf" id="7_7aqry"]
+[ext_resource type="Texture2D" uid="uid://coap5u4dqueav" path="res://Assets/Others/hurt_overlay_by_jadenterak_d5ypmf1-fullview.png" id="8_wq0pn"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7aqry"]
 radius = 32.0156
@@ -92,6 +93,7 @@ offset_right = -628.0
 offset_bottom = 1.43994
 EnableIconBar = false
 AllowRegeneration = false
+CurrentValue = 50
 
 [node name="StaminaBar" parent="CanvasLayer" instance=ExtResource("6_322wo")]
 offset_left = -628.28
@@ -210,5 +212,23 @@ theme_override_fonts/font = ExtResource("7_7aqry")
 theme_override_font_sizes/font_size = 50
 text = "30"
 autowrap_mode = 2
+
+[node name="BleedOverlay" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Img" type="TextureRect" parent="CanvasLayer/BleedOverlay"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_wq0pn")
 
 [connection signal="EmptyBar" from="CanvasLayer/HealthBar" to="." method="_on_health_bar_empty_bar"]

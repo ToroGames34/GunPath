@@ -9,6 +9,7 @@ const SPEED: float = 220.0
 
 signal ShootBullets(bullet, pos, rot, dmg)
 
+@onready var BleedOverlay: TextureRect = $CanvasLayer/BleedOverlay/Img
 @onready var BodyPart: Node2D = $BodyPart
 @onready var FusilSprite: Sprite2D = $BodyPart/ContBody/ContBodyScale/WeaponContainer/Fusil
 @onready var ShotgunSprite: Sprite2D = $BodyPart/ContBody/ContBodyScale/WeaponContainer/Shotgun
@@ -29,6 +30,10 @@ var Stamina: int
 var Acceleration: float = 50.0
 var SecForTakeStamina: float = 0.14
 var CostStaminaPerSSec: int = 1
+var BleedOverlayAnimSpeed: float = 1
+var BleedOverlayMaxVisibleValue: float = 0.7
+var BleedOverlayMinVisibleValue: float = 0.1
+var MinHealthToShowBleedOverlay: int = 35
 
 var AttackSpeedFusil: float = 0.05
 var AttackSpeedShotGun: float = 0.35
@@ -54,6 +59,8 @@ var CanShootCD: bool = true
 var CanScattering: bool = false
 var CanChangeWeapons: bool = true
 var FullReload: bool = false
+var CanPlayBleedOverlayAnim: float = true
+var OnetimeStartBleedOverlayAnim: bool = true
 
 var FusilAmmo: Dictionary[String, int] = {
 	"MaxBullets": 35,
@@ -81,6 +88,7 @@ func _ready() -> void:
 	TimerAttackSpeedSetting()
 	TimerTakeStaminaSetting()
 	TimerReloadWeaponSetting()
+	BleedOverlayAnimManager()
 
 
 func SetSuplierWeapons() -> void:
@@ -284,7 +292,18 @@ func _on_TimerAttackSpeed_timeout() -> void:
 
 func TakeDamage(val: int) -> void:
 	HealthBar.SetDecreaseValue(val)
-	#AnimHurt()
+	#AnimHurt() 
+	BleedOverlayAnimManager()
+
+
+func BleedOverlayAnimManager() -> void:
+	if HealthBar.GetValue() <= MinHealthToShowBleedOverlay and OnetimeStartBleedOverlayAnim:
+		OnetimeStartBleedOverlayAnim = false
+		StartBleedAnim()
+		
+	elif HealthBar.GetValue() >= MinHealthToShowBleedOverlay and !OnetimeStartBleedOverlayAnim:
+		OnetimeStartBleedOverlayAnim = true
+		StopBleedAnim()
 
 
 func TakeStaminaForRunning(val: int) -> void:
@@ -396,3 +415,24 @@ func ReloadWeapon(dic: Dictionary, supplier: Array) -> void:
 		dic.Bullets += 1
 		if supplier[0] <= 0:
 			supplier.remove_at(0)
+
+
+func StartBleedAnim() -> void:
+	var tween: Tween = get_tree().create_tween()
+	
+	CanPlayBleedOverlayAnim = true
+	BleedOverlay.modulate = Color(1, 1, 1, 0)
+	BleedOverlay.visible = true
+	
+	tween.tween_property(BleedOverlay, "modulate", Color(1, 1, 1, BleedOverlayMaxVisibleValue), BleedOverlayAnimSpeed).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+	tween.tween_property(BleedOverlay, "modulate", Color(1, 1, 1, BleedOverlayMinVisibleValue), BleedOverlayAnimSpeed).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+	
+	await tween.tween_interval(0).finished
+	if CanPlayBleedOverlayAnim:
+		StartBleedAnim()
+
+
+func StopBleedAnim() -> void:
+	CanPlayBleedOverlayAnim = false
+	BleedOverlay.modulate = Color(1, 1, 1, 0)
+	BleedOverlay.visible = false
